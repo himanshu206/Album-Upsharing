@@ -1,0 +1,219 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Home</title>
+            <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+            <link href = "{% static 'bootstrap/css/bootstrap.css' %}" rel = "stylesheet" type = "text/css">
+
+            <script src = "{% static 'bootstrap/js/jquery.js' %}"></script>
+            <script src = "{% static 'bootstrap/js/bootstrap.js' %}"></script>
+
+        <style type = "text/css">
+
+         body{
+             background-image: url("{% static 'Images/coverart2012.jpg' %}");
+             background-repeat: repeat;
+         }
+
+         #maindiv{
+            margin:100px auto;
+            width:1000px;
+            background:transparent;
+        }
+
+        input{
+            width:400px !important;
+        }
+
+        #fname, #lname{
+            width:200px !important;
+        }
+
+        #register{
+            display:none;
+        }
+
+        #login, #register{
+            width:500px;
+            margin:0px auto;
+        }
+
+        #regLight, #loginLight{
+            cursor:pointer;
+        }
+
+        #regSuccess, #regFail{
+            display:none;
+            font-size:20px;
+        }
+
+        #loginSuccess, #loginFail{
+            display:none;
+            font-size:20px;
+        }
+
+        .inline{
+            display:inline-block;
+        }
+        </style>
+
+        <script type = "text/javascript">
+            $( document ).ready(function() {
+                $("#regLight").click(function(){
+                    $("#login").fadeOut(function(){$("#register").fadeIn()})
+                });
+
+                $("#loginLight").click(function(){
+                    $("#register").fadeOut(function(){$("#login").fadeIn()})
+                })
+
+
+                // ajax register
+                $("#registerForm").on('submit', function(event) {
+                    event.preventDefault();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'register' %}",
+                        dataType: "json",
+                        async: true,
+                        data: {
+                            csrfmiddlewaretoken: "{{ csrf_token }}",
+                            f_name: $("#fname").val(),
+                            l_name: $("#lname").val(),
+                            regEmail: $("#regEmail").val(),
+                            regPasswd: $("#regPasswd").val()
+                        },
+                        success: function (json) {
+                            if(json.message == 1){
+                                html_data = "Hi, <span style = 'color:purple'><b>"+json.username+"</b></span>!! Thanks for the registration."
+                                $("#regSuccess").html(html_data);
+                                $("#regSuccess").fadeIn().delay(1000).fadeOut();
+                            }
+                            else{
+                                html_data = "<div style = 'color:red'>Oops!! User having email <b>"+json.email+ "</b> already exists</div>";
+                                $("#regFail").html(html_data);
+                                $("#regFail").fadeIn().delay(1000).fadeOut();
+                            }
+
+                        }
+                    });
+                });
+
+
+
+                // ajax login
+                $("#loginForm").on('submit', function(event) {
+                    event.preventDefault();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'login' %}",
+                        dataType: "json",
+                        async: true,
+                        data: {
+                            csrfmiddlewaretoken: "{{ csrf_token }}",
+                            loginEmail: $("#loginEmail").val(),
+                            loginPasswd: $("#loginPassword").val()
+                        },
+                        success: function (json) {
+                            if(json.message == 0){
+                                html_data = "<div style = 'color:red'>Oops, Invalid credentials!!</div>";
+                                $("#loginFail").html(html_data);
+                                $("#loginFail").fadeIn().delay(1000).fadeOut();
+                            }
+                            else{
+                                var user_Id = json.User_id;
+                                window.location = "/profile/?Uid="+user_Id;
+                            }
+
+                        }
+                    });
+                });
+
+
+            })
+        </script>
+    </head>
+
+    <body>
+         <div style = "text-align:center;color:white;"><h1>Album Upsharing</h1></div>
+
+    <div class="jumbotron" id = "maindiv">
+
+        <div class="panel panel-primary" id = "register">
+        <div class="panel-heading">
+            <h3 class="panel-title">Register here!!</h3>
+        </div>
+        <div class="panel-body">
+             <div>
+            <form role="form" id = "registerForm">{% csrf_token %}
+                <div class="form-group">
+                    <div style = "display:inline-block">
+                        <label for="fname">Firstname</label>
+                        <input type="text" class="form-control" data-clear-btn="true" name = "fname" id="fname" placeholder="Enter firstname" required>
+                    </div>
+
+                    <div style = "display:inline-block">
+                        <label for="lname">Lastname</label>
+                        <input type="text" class="form-control" data-clear-btn="true" name = "lname" id="lname" placeholder="Enter lastname" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="regEmail">Email address</label>
+                    <input type="email" style = "width:406px !important" class="form-control" name = "email" id="regEmail" placeholder="Enter email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="regPasswd">Password</label>
+                    <input type="password" style = "width:406px !important;" class="form-control" name = "password" id="regPasswd" placeholder="Password" required>
+                </div>
+
+                <div>
+                    <div class = "inline"><button type = "submit" class="btn btn-warning">Submit</button></div>
+                    <div class = "inline" style = "float:right;margin-right:60px;"><button type = "reset" class = "btn btn-warning">Reset</button></div>
+                </div>
+                </form>
+            <div class="alert alert-success" id = "regSuccess"></div>
+            <div class="alert alert-danger" id = "regFail"></div>
+            <p>If you already have an account, <a id = "loginLight">SignIn here!!</a></p>
+        </div>
+        </div>
+    </div>
+
+
+    <div class="panel panel-primary" id = "login">
+        <div class="panel-heading">
+            <h3 class="panel-title">Login here!!</h3>
+        </div>
+        <div class="panel-body">
+            <div>
+            <form role="form" id = "loginForm" >{% csrf_token %}
+                <div class="form-group">
+                    <label for="loginEmail">Email address</label>
+                    <input type="email" class="form-control" id="loginEmail" placeholder="Enter email" name = "login_email" required="required">
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" class="form-control" id="loginPassword" placeholder="Password" name = "login_passwd" required="required">
+                </div>
+
+
+
+
+
+                <button type="submit" class="btn btn-warning">Submit</button>
+            </form>
+            <div class="alert alert-success" id = "loginSuccess"></div>
+            <div class="alert alert-danger" id = "loginFail"></div>
+            <p>If you don't have an account, <a id = "regLight">SignUp here!!</a></p>
+        </div>
+        </div>
+    </div>
+
+
+    </div>
+    </body>
+</html>

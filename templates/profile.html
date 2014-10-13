@@ -1,0 +1,531 @@
+{% load staticfiles %}
+<html lang="en">
+    <head>
+        <title>Home</title>
+            <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+            <link href = "{% static 'bootstrap/css/bootstrap.css' %}" rel = "stylesheet" type = "text/css">
+            <link href = "../static/bootstrap/css/dropzone.css" rel = "stylesheet" type = "text/css">
+            <link rel="stylesheet" href="{% static 'fancybox/source/jquery.fancybox.css' %}" type="text/css" media="screen" />
+
+
+            <script src = "{% static 'bootstrap/js/jquery.js' %}"></script>
+            <script src = "{% static 'bootstrap/js/bootstrap.js' %}"></script>
+            <script src = "{% static 'bootstrap/js/dropzone.js' %}"></script>
+            <script type="text/javascript" src="{% static 'fancybox/source/jquery.fancybox.pack.js' %}"></script>
+
+            <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+
+    </head>
+    <style type = "text/css">
+
+        body{
+            margin:0px;
+            padding:0px;
+            min-width:1050px;
+
+        }
+
+        #header{
+            width:100%;;
+            height:90px;
+            background:beige;
+            padding:5px;
+            background: url("{% static 'Images/header.jpg' %}");
+        }
+
+        .left{
+            float:left;
+            margin-left:20px;
+            margin-top:-10px;
+            color:#ffff00;
+            font-size:40px;
+            text-shadow: 2px 2px 5px orange;
+        }
+
+        .right{
+            float:right;
+            margin:2px;
+        }
+
+        #user_image{
+            width:80px;
+            height:80px;
+        }
+
+        #container{
+            width:100%;
+            height:100%;
+            background:whitesmoke;
+        }
+
+        #upload-btn{
+
+            margin:10px;
+        }
+
+        #image-uploader, #image-panel{
+
+            width:95%;
+            display:none;
+            position:relative;
+            margin:10px;
+        }
+
+        #Uname{
+            color:orangered;
+
+        }
+        
+        #username{
+            color:white;
+        }
+
+        .panel-inner{
+            width:100%;
+        }
+
+        #panel-inner-body{
+            margin-top:4px;
+            bottom:10px;
+            overflow-y:auto;
+            width:auto;
+            background:lightgray;
+        }
+
+        #panel-inner-footer{
+            position:absolute;
+            bottom:5px;
+        }
+
+        .dropzone{
+            background:transparent !important;
+        }
+
+        #dropzone-div{
+            height:70%;
+        }
+
+        .panel-inner span{
+            float:right;
+            margin-right:20px;
+        }
+
+        input{
+            width:400px !important;
+        }
+
+        #empty-album-name{
+            display:none;
+            float:left;
+        }
+
+        #upload_btn_div{
+
+            text-align:center;
+        }
+
+        #left-div{
+            float:left;
+            height:100%;
+            background: url("{% static 'Images/div.jpg' %}");
+            background-repeat: no-repeat;
+            width:20%;
+            padding:2px;
+        }
+
+        #right-div{
+            float:right;
+            height:100%;
+            background: url("{% static 'Images/div.jpg' %}");
+            background-repeat: no-repeat;
+            width:80%;
+        }
+
+        #album-name-div{
+            padding:10px;
+        }
+
+        #album-list{
+            overflow-y:auto;
+            height:83%;
+        }
+
+        #album-name-div, #dropzone-div{
+            display:none;
+        }
+
+        .albums-div{
+            display:inline-block;
+            margin:5px;
+            box-shadow:1px 1px 5px darkgray;
+            padding:5px;
+           background: url("{% static 'Images/album.jpg' %}");
+            background-repeat: no-repeat;
+        }
+
+        .album-Name{
+            color:gray;
+            font-size:20px;
+        }
+
+        .album-span{
+           // display:none;
+
+        }
+
+        .inlineB{
+            height:200px;
+            width:60px;
+            overflow-y:auto;
+            text-align:center;
+
+        }
+
+        .count-photos{
+            color:darkgray;
+            font-size:18px;
+            margin-left:10px;
+        }
+
+        #style-album-name{
+            color:purple;
+            font-size:18px;
+        }
+
+        #Gallery{
+            height:100%;
+            overflow-y:auto;
+        }
+
+        #right-div{
+            //background: url("{% static 'Images/body1.jpg' %}");
+        }
+
+        #image-form{
+            min-height:100% !important;
+        }
+
+
+
+.button1 {
+    display: block;
+    font-size:18px;
+    text-decoration: none;
+    margin:5px;
+    padding: 20px 30px 20px 25px;
+    width: 98%;
+    border-radius:2px;}
+
+.button1:hover {
+    text-decoration:none;
+    curson:pointer;
+    }
+
+
+.blue {
+    color: #fff;
+    background: #48C9FF;
+    background: -webkit-linear-gradient(top, #48C9FF 0%, #2EA8E5 100%);
+    background: -moz-linear-gradient(top, #48C9FF 0%, #2EA8E5 100%);
+    background: -ms-linear-gradient(top, #48C9FF 0%, #2EA8E5 100%);
+    background: -o-linear-gradient(top, #48C9FF 0%, #2EA8E5 100%);
+    background: linear-gradient(to bottom, #48C9FF 0%, #2EA8E5 100%);
+    text-shadow: #29a3cc 0 1px 3px;
+    -webkit-box-shadow:
+        inset 0 1px 0 #38bdf4,
+        inset 0 2px 0 #7bdeff,
+        0 1px 3px #777,
+        0 0px 1px #ccc;
+    -moz-box-shadow:
+        inset 0 1px 0 #38bdf4,
+        inset 0 2px 0 #7bdeff,
+        0 1px 3px #777,
+        0 0px 1px #ccc;
+    box-shadow:
+        inset 0 1px 0 #38bdf4,
+        inset 0 2px 0 #7bdeff,
+        0 1px 3px #777,
+        0 0px 1px #ccc;}
+
+
+    </style>
+    <script type = "text/javascript">
+
+         function showDiv(id, name){
+             $("#album_Id").val(id);
+             $("#panel-heading-data").html("Upload images in the album - <span id = 'current-album-name'></span>!!");
+
+             var clickedAlbum = $("#album_Id").val();
+             $("#album-name-close").hide();
+             $("#current-album-name").html("<span id = 'style-album-name'>"+name+" </span>");
+             $("#Gallery").fadeOut(function(){$("#image-uploader, #image-panel, #dropzone-div, #close, #upload").fadeIn()});
+             if($("#dropzone-div").is(":visible")){
+                     $("#album-name-div").hide()
+                     $("#album-name-close").hide()
+                     $("#close").show()
+                     $("#upload").show()
+                     $("#resetAlbumNameForm").click();
+                     $("#resetImageForm").click();
+                 }
+
+         }
+
+         $( document ).ready(function() {
+             var currentAlbumId;
+             var user_data = {{ user_data|safe }}
+             $("#username").html("Hi, " + user_data.first_name + " " + user_data.last_name);
+             var hash = CryptoJS.MD5(user_data.user_email);
+             $("#Uname").html(user_data.first_name);
+             $('#user_image').attr('src', 'http://www.gravatar.com/avatar/' + hash);
+             $("#upload_btn").on('click', function () {
+                 $("#panel-heading-data").html("Give a name to your album here!!");
+                 $("#Gallery").fadeOut(function(){$("#image-uploader, #image-panel, #album-name-div, #album-name-close").fadeIn();});
+
+                 if($("#dropzone-div").is(":visible")){
+                     $("#album-name-div").hide()
+                     $("#album-name-close").hide()
+                     $("#close").show()
+                     $("#upload").show()
+                     $("#resetAlbumNameForm").click();
+                     $("#resetImageForm").click();
+                 }
+
+                 else{
+                     $("#album-name-div").fadeIn()
+                     $("#close").hide()
+                     $("#upload").hide()
+                 }
+
+
+             });
+
+             $("#close").on('click', function(){
+                 $("#image-uploader, #image-panel, #dropzone-div, #close, #upload").fadeOut(function(){$("#Gallery").fadeIn()});
+             });
+
+
+             $("#album-name-close").on('click', function () {
+                 $("#image-uploader, #image-panel, #album-name-div, #album-name-close").fadeOut(function(){$("#Gallery").fadeIn();});
+                 $("#resetAlbumNameForm").click();
+
+             });
+
+             $("#close").on('click', function () {
+                 $("#image-uploader, #image-panel, #dropzone-div, #close, #upload").fadeOut(function(){ $("#Gallery").fadeIn();});
+                 $("#resetImageForm").click();
+
+             });
+
+
+             Dropzone.autoDiscover = false;
+
+                    var myDropzone = new Dropzone(".dropzone", {
+                        url: "{% url 'upload' %}",
+                        addRemoveLinks: true,
+                        thumbnailWidth: "80",
+                        thumbnailHeight: "80",
+                        dictCancelUpload: "Cancel",
+                        parallelUploads: 100,
+                        autoProcessQueue: false,
+                        acceptedFiles: "image/*"
+                    });
+
+             myDropzone.on("drop", function (event) {
+                 $('.dropzone').animate({
+                     opacity: 1,
+                     top: "-5"
+                 });
+             });
+
+
+             $("#upload").on('click', function () {
+                         myDropzone.processQueue();
+
+             });
+
+             $('.fancybox').fancybox({openEffect  : 'elastic',
+                                      prevEffect	: 'none',
+		                              nextEffect	: 'none'});
+
+
+             $("#hiddenClick").on('click',function(event) {
+                       event.preventDefault();
+
+                        $.ajax({
+                        type: "POST",
+                        url: "{% url 'getAlbums' %}",
+                        dataType: "json",
+                        async: true,
+                        data: {
+                            hidden_val:1
+                        },
+                        success: function (json_data) {
+                                album_data = json_data['album_info']
+                                photo_data = json_data['photo_data']
+
+
+                                for(i=0;i<album_data.length;i++){
+                                   var htmlData = "<a href = '#"+album_data[i].pk+"' onclick = 'showDiv(this.id, this.name)' id='"+album_data[i].pk+"' name = '"+album_data[i]['fields'].albumName+"' class = 'list-group-item'><span style = 'color:orange;font-size:18px;'>"+album_data[i]['fields'].albumName+"</span><span class='badge' id = 'badge"+album_data[i].pk+"'>"+album_data[i]['fields'].count+"</span><br><br><span>Created at "+album_data[i]['fields'].date+"</span></a>";
+                                   $("#album-list").append(htmlData);
+                                }
+
+
+                                $.each(photo_data, function(i, v){
+                                    var $div = $("<div>", {id: "album"+i, class: "albums-div"});
+                                    var $div_span = $("<div>", {class: "inlineB"});
+                                    $($div).append($div_span)
+                                    var $span = $("<span>", {id: "album_span"+i, class: "album-span"})
+                                    $($div_span).append($span)
+                                    $("#Gallery").append($div);
+                                    var count=0;
+                                    var storeAlbumId;
+                                    $.each(v, function(j, k){
+                                       count++;
+
+                                       if(j==0){
+
+
+                                           $("#album"+i).append("<div style = 'float:left'><a href = '../user_images/"+k['fields'].photo+"' class = 'fancybox' rel = 'gallery"+i+"'><img src = '../user_images/"+k['fields'].photo+"' style = 'width:250px;height:200px'></a><p><span  class = 'album-Name'>"+album_data[i]['fields'].albumName+"<span><span class = 'count-photos' id = 'photos"+i+"'><span></p></div>");
+                                       }
+
+                                       else{
+                                           $($span).append("<a href = '../user_images/"+k['fields'].photo+"' class = 'fancybox' rel = 'gallery"+i+"'><img src = '../user_images/"+k['fields'].photo+"' style = 'height:50px;width:50px;margin-top:4px;box-shadow:1px 1px 5px gray'>");
+                                       }
+
+                                        storeAlbumId = k['fields'].albumPhoto
+                                    })
+                                    $("#album"+i).append($div_span);
+                                    $("#photos"+i).html("[ "+count+" ]")
+                                    $("#badge"+storeAlbumId).html(count)
+
+                                });
+
+                        }
+
+
+                        });
+                 });
+
+
+
+
+             $("#hiddenClick").click();
+
+
+             $("#album-name-form").on('submit', function (event) {
+                        event.preventDefault();
+
+                        $.ajax({
+                        type: "POST",
+                        url: "{% url 'albumName' %}",
+                        dataType: "json",
+                        async: true,
+                        data: {
+                            csrfmiddlewaretoken: "{{ csrf_token }}",
+                            album_name: $("#album-name").val()
+                        },
+                        success: function (json_data) {
+
+                             currentAlbumId = $("#album_Id").val(json_data.album_id);
+                             html_album_data = "<a href='#"+json_data.album_id+"' id = '"+json_data.album_id+"' class='list-group-item'><span style = 'color:orange;font-size:18px;'>"+json_data.album_name+"</span><span class='badge'>"+json_data.album_photos_count+"</span><br><br><span>Created at "+json_data.album_created_date+"</span></a>";
+                             $("#album-list").prepend(html_album_data);
+                             $("#album-name-div").hide(function(){$("#panel-heading-data").html("Upload images in the album - <span id = 'current-album-name'></span>!!"); $("#current-album-name").html("<span id = 'style-album-name'>"+json_data.album_name+" </span>");$("#dropzone-div").show();$("#close").show();$("#upload").show();$("#album-name-close").hide()})
+                        }
+                    });
+             })
+
+
+         })
+
+    </script>
+
+    <body>
+        <div id = "header">
+            <span class="left">
+                Album Upsharing
+            </span>
+            <span class = "right">
+                <span id = "username"></span>
+                <p><a href = "{% url 'logout' %}">Logout!</a></p>
+            </span>
+
+            <span class = "right">
+                <img src = "{% static 'Images/ajax.gif' %}" id = "user_image">
+            </span>
+        </div>
+
+        <div id = "container">
+
+           <div id = "left-div">
+                <div id = "upload_btn_div">
+                    <span id = "upload-btn">
+                        <a class="button1 blue" id = upload_btn>Create Album</a>
+                    </span>
+                </div>
+
+                <div class="list-group">
+                    <li class="list-group-item list-group-item-warning">
+                        Your Albums
+                    </li>
+                    <div id = "album-list"></div>
+                </div>
+           </div>
+
+           <div id = "right-div">
+
+                 <div id = "Gallery">
+
+                 </div>
+
+                 <div id = "image-uploader">
+                     <div class="panel panel-default" id = "image-panel">
+                        <div class="panel-heading">Hi <span id = "Uname"></span>, <span id = 'panel-heading-data'>Give a name to your album here!!</span></div>
+                            <div class="panel-body">
+
+                            <div class = "panel-inner" id = "panel-inner-body">
+
+                                <div id = "album-name-div">
+                                     <form id = "album-name-form"  role = "form">
+                                        {% csrf_token %}
+
+                                        <div class="form-group">
+                                            <label for="album-name">Album Name</label>
+                                            <input type="text" class="form-control" id="album-name" placeholder="Your Album Name" name = "album-name" required="required">
+                                        </div>
+                                        <button type="submit" class="btn btn-warning">Submit</button>
+                                        <input type = "reset" id ="resetAlbumNameForm" hidden>
+                                    </form>
+
+                                </div>
+
+                                <div id="dropzone-div">
+                                    <form class = "dropzone" id = "image-form">
+                                        {% csrf_token %}
+                                        <div class="dropzone-previews" style = "width:320px;">Drag and Drop your images here or Click to upload</div>
+                                        <input type = "text" name = "album_Id" id = "album_Id" hidden>
+                                        <div class="fallback">
+                                            <input name="image_file" type="file" multiple="" />
+
+                                        </div>
+                                        <input type = "reset" id ="resetImageForm" hidden>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-danger right" id = "album-name-close">Close</button>
+                            <div class = "panel-inner" id = "panel-inner-footer">
+
+                                   <span><button class="btn btn-danger" id = "close">Close</button></span>
+                                   <span><button class="btn btn-success" id = "upload">Upload</button></span>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           </div>
+
+        </div>
+        <button id = "hiddenClick" style = "display:none">Hidden</button>
+    </body>
+</html>
